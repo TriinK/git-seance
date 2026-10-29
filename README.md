@@ -2,21 +2,34 @@
 
 **Ask the ghosts in your git history.** Point git-seance at any line of legacy code and a local [Gemma](https://ai.google.dev/gemma) model tells you its story, in the first person, citing the real commits that shaped it.
 
-<!-- TODO before publishing: replace this illustrative sample with output from a real run. -->
+![seance haunt and seance why running on the archived angular.js repo](https://raw.githubusercontent.com/TriinK/git-seance/master/docs/demo.gif)
+
 ```text
-$ seance why src/app.js:214
+$ git clone https://github.com/angular/angular.js && cd angular.js   # archived, 9,000+ commits
+$ seance why src/ng/httpBackend.js:59
+   55 | }
+   56 | 
+   57 | function createHttpBackend($browser, createXhr, $browserDefer, callbacks, rawDocument) {
+   58 |   // TODO(vojta): fix the signature
+>> 59 |   return function(method, url, post, callback, headers, timeout, withCredentials, responseType, eventHandlers, uploadEventHandlers) {
+   60 |     url = url || $browser.url();
+   61 | 
+   62 |     if (lowercase(method) === 'jsonp') {
+   63 |       var callbackPath = callbacks.createCallback(url);
 
-   210 |   $scope.refresh = function () {
->> 214 |     $timeout(poll, 3000); // do not lower!
-   218 |   };
-
-3 commit(s) have touched this line.
+5 commit(s) have touched this line.
 
 🕯  Lighting the candles... summoning gemma4:e4b
 
-I was born a modest 300 milliseconds in [3f1c2a9]... 
+I am the silent witness to this function's birth. I remember the beginning, when I was simpler, carrying only the basic parameters [5ad0c7d0e].
 
-Advice from beyond: write a test before you dare to lower me.
+The journey began with the addition of `withCredentials` [86182a941], a whisper of security added to my parameters. Then came `responseType` [e0a54f6b2], allowing my form to handle different kinds of responses.
+
+The weight grew heavier when `eventHandlers` were introduced [50cdedef3], giving me ears to listen to the network's whispers. But my transformation peaked with the arrival of `uploadEventHandlers` [d49782226].
+
+Now, I stand here, bloated with parameters—`method, url, post, callback, headers, timeout, withCredentials, responseType, eventHandlers, uploadEventHandlers`—a testament to every feature added over the years. It was a gradual, necessary bloat, each new signature reflecting a new capability the code needed to possess.
+
+Advice from beyond: If the parameter list continues to grow, consider refactoring these optional configuration items into a single configuration object to clean up the function signature.
 
 ✓ Every commit the ghost cited is real.
 ```
@@ -36,7 +49,7 @@ Every legacy codebase has lines nobody dares to touch, written by people who lef
 ollama pull gemma4:e4b
 
 # 2. Install git-seance
-git clone https://github.com/<your-username>/git-seance
+git clone https://github.com/TriinK/git-seance
 cd git-seance
 pip install -e .
 
@@ -71,7 +84,7 @@ Ollama on another machine? Set `OLLAMA_HOST`, e.g. `OLLAMA_HOST=http://192.168.1
 
 ## Good repos to try
 
-Any abandoned project with a long history works. For a properly spooky demo, try an AngularJS-era app (AngularJS reached end-of-life at the end of 2021), or any project of yours with commits older than five years.
+Any abandoned project with a long history works. For a properly spooky demo, try an AngularJS-era app, or [angular/angular.js](https://github.com/angular/angular.js) itself (AngularJS reached end-of-life at the end of 2021), or any project of yours with commits older than five years.
 
 ## Development
 
